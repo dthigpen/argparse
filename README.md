@@ -8,22 +8,25 @@ A Python `argparse` inspired argument parser written for C. This is just meant t
 > This project is under active development and does not even have base functionality yet! This section has been provided to show what it might look like.
 
 ```c
-int main(int argc, char* argv[]) {
-    // parsed args to be used throughout program
-    typedef struct Arguments {
+int main(int argc, char** argv) {
+    // my program arguments struct to be populated
+    typedef struct {
         char* path;
         int lines;
     } Arguments;
-    // set default values first
+    // create instance and set defaults beforehand
     Arguments args = {.lines = 10};
-    ArgParser parser = {"Description of your program"};
-    Arg* options = {
-      {"filename", &args.path, .help="The name of the file to open"},
-      {"--lines", &args.lines, .transform=&toInt, .help="The max number of lines to read"},
-      {0}};
-    // parse into Arguments struct
-    parse_args(parser, options, argc, argv);
-
+    // create parser
+    ArgParser parser = {
+        .description = "Description of your program",
+        (Arg[]){{"filename", &args.path,
+                    .help = "The name of the file to open"},
+                {"--lines", &args.lines,
+                    .transform = &toInt,
+                    .help = "The max number of lines to read"},
+                {0}},
+    };
+    parse_args(parser);
     printf("Opening file %s and read %d lines..\n",args.path, args.lines);
     return 0;
 }
