@@ -19,12 +19,9 @@ int main(int argc, char** argv) {
     // create parser
     ArgParser parser = {
         .description = "Description of your program",
-        (Arg[]){{"filename", &args.path,
-                    .help = "The name of the file to open"},
-                {"--lines", &args.lines,
-                    .transform = &toInt,
-                    .help = "The max number of lines to read"},
-                {0}},
+        .args = (Arg[]){{"filename", &args.path, .help = "The name of the file to open"},
+                        {"--lines", &args.lines, .transform = &toInt, .help = "The max number of lines to read"},
+                        {0}},
     };
     parse_args(parser);
     printf("Opening file %s and read %d lines..\n",args.path, args.lines);
